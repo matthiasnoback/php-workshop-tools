@@ -7,6 +7,7 @@ use Assert\Assertion;
 use function Common\CommandLine\line;
 use function Common\CommandLine\make_cyan;
 use function Common\CommandLine\stdout;
+use Common\Serialization\JsonSerializer;
 
 class DB
 {
@@ -17,13 +18,13 @@ class DB
      */
     public static function persist(CanBePersisted $object)
     {
-        $id = (string)$object->id();
+        $serializedObject = JsonSerializer::serialize($object);
 
-        $allData = self::loadAllObjects();
-        $allData[get_class($object)][$id] = $object;
-        self::saveAllObjects($allData);
+        $filename = self::determineFilenameFor(get_class($object), (string)$object->id());
+        @mkdir(dirname($filename), 0777, true);
+        file_put_contents($filename, $serializedObject);
 
-        stdout(line(make_cyan('Persisted'), get_class($object), ':', $id));
+        stdout(line(make_cyan('Persisted'), get_class($object), ':', (string)$object->id()));
     }
 
     /**
@@ -35,12 +36,13 @@ class DB
      */
     public static function retrieve(string $className, string $id)
     {
-        $data = static::retrieveAll($className);
-        if (!array_key_exists($id, $data)) {
+        $filename = self::determineFilenameFor($className, $id);
+
+        if (!is_file($filename)) {
             throw new \RuntimeException(sprintf('Unable to load %s with ID %s', $className, $id));
         }
 
-        return $data[$id];
+        return JsonSerializer::deserialize($className, file_get_contents($filename));
     }
 
     /**
@@ -51,33 +53,21 @@ class DB
      */
     public static function retrieveAll(string $className): array
     {
-        $data = self::loadAllObjects();
+        $files = self::allFilesFor($className);
+        return array_map(function (string $filename) use ($className) {
+            return JsonSerializer::deserialize($className, file_get_contents($filename));
+        }, $files);
 
         return $data[$className] ?? [];
     }
 
-    /**
-     * Load all previously peristed objects from disk.
-     *
-     * @return array
-     */
-    private static function loadAllObjects() : array
+    public static function deleteAll(string $className)
     {
-        if (!file_exists(self::databaseFilePath())) {
-            return [];
+        $files = self::allFilesFor($className);
+
+        foreach ($files as $file) {
+            unlink($file);
         }
-
-        return unserialize(file_get_contents(self::databaseFilePath()));
-    }
-
-    /**
-     * Save all objects in the given array to disk.
-     *
-     * @param array $allData
-     */
-    private static function saveAllObjects(array $allData)
-    {
-        file_put_contents(self::databaseFilePath(), serialize($allData));
     }
 
     /**
@@ -93,5 +83,29 @@ class DB
         Assertion::writeable(dirname($dbPath));
 
         return getenv('DB_PATH');
+    }
+
+    private static function determineFilenameFor(string $class, string $id)
+    {
+        $filename = self::determineDirectoryFor($class) . '/' . $id . '.json';
+
+        return $filename;
+    }
+
+    private static function determineDirectoryFor(string $class)
+    {
+        return self::databaseFilePath() . '/' . str_replace('\\', '_', $class);
+    }
+
+    /**
+     * @param string $className
+     * @return array
+     */
+    private static function allFilesFor(string $className)
+    {
+        $directory = self::determineDirectoryFor($className);
+
+        $files = glob($directory . '/*.json');
+        return $files;
     }
 }

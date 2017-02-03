@@ -10,8 +10,9 @@ class DBTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        putenv('DB_PATH=' . getenv('APP_ROOT') . '/var/db/test.db');
-        @unlink(DB::databaseFilePath());
+        putenv('DB_PATH=' . getenv('APP_ROOT') . '/var/db');
+
+        // remove all DB files (add a method to DB for that)
     }
 
     /**
@@ -20,7 +21,7 @@ class DBTest extends \PHPUnit_Framework_TestCase
     public function it_persists_and_retrieves_objects_by_their_id()
     {
         $id = Uuid::uuid4();
-        $object = new PersistableDummy($id);
+        $object = new PersistableDummy((string)$id);
 
         DB::persist($object);
 
@@ -43,8 +44,10 @@ class DBTest extends \PHPUnit_Framework_TestCase
      */
     public function it_retrieves_all_objects_by_classname()
     {
-        DB::persist(new PersistableDummy(Uuid::uuid4()));
-        DB::persist(new PersistableDummy(Uuid::uuid4()));
+        DB::deleteAll(PersistableDummy::class);
+
+        DB::persist(new PersistableDummy((string)Uuid::uuid4()));
+        DB::persist(new PersistableDummy((string)Uuid::uuid4()));
 
         $this->assertCount(2, DB::retrieveAll(PersistableDummy::class));
     }

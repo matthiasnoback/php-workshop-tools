@@ -141,7 +141,12 @@ final class JsonSerializer
             file_get_contents($fileName)
         );
 
-        $docblock = $this->docblockFactory->create($property->getDocComment(), $context);
+        $docComment = $property->getDocComment();
+        // TODO deduplicate this error message
+        Assertion::notEmpty($docComment,
+            sprintf('You need to add an @var annotation to property "%s"', $property->getName()));
+
+        $docblock = $this->docblockFactory->create($docComment, $context);
         $varTags = $docblock->getTagsByName('var');
         Assertion::count(
             $varTags,
