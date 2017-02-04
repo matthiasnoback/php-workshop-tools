@@ -7,7 +7,7 @@ use Assert\Assertion;
 use function Common\CommandLine\line;
 use function Common\CommandLine\make_cyan;
 use function Common\CommandLine\stdout;
-use Common\Serialization\JsonSerializer;
+use NaiveSerializer\JsonSerializer;
 
 class DB
 {
