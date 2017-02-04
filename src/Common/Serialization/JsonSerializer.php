@@ -40,7 +40,7 @@ final class JsonSerializer
 
     private function doDeserialize(string $class, string $jsonEncodedData)
     {
-        return self::hydrate(new Object_(new Fqsen('\\' . $class)), json_decode($jsonEncodedData, true));
+        return self::hydrate(new Object_(new Fqsen('\\' . $class)), $this->jsonDecode($jsonEncodedData));
     }
 
     private function hydrate(Type $type, $data)
@@ -63,9 +63,13 @@ final class JsonSerializer
 
         if ($type instanceof Object_) {
             $reflection = new \ReflectionClass((string)$type);
+            if (!$reflection->isUserDefined()) {
+                throw new \LogicException(sprintf('Class "%s" is not user-defined', $type));
+            }
+
             $object = $reflection->newInstanceWithoutConstructor();
             foreach ($reflection->getProperties() as $property) {
-                if (!isset($data[$property->getName()])) {
+                if (!array_key_exists($property->getName(), $data)) {
                     continue;
                 }
 
@@ -93,40 +97,45 @@ final class JsonSerializer
 
     private function doSerialize($object)
     {
-        return json_encode($this->extract($object), JSON_PRETTY_PRINT);
+        return json_encode($this->extractSerializableDataFrom($object), JSON_PRETTY_PRINT);
     }
 
-    private function extract($object)
+    private function extractSerializableDataFrom($something)
     {
-        if (is_object($object)) {
+        if (is_object($something)) {
             $data = [];
 
-            $reflection = new \ReflectionClass(get_class($object));
+            $reflection = new \ReflectionClass(get_class($something));
+            if (!$reflection->isUserDefined()) {
+                throw new \LogicException(sprintf('Class "%s" is not user-defined', $reflection->getName()));
+            }
+
             foreach ($reflection->getProperties() as $property) {
                 $property->setAccessible(true);
-                $data[$property->getName()] = $property->getValue($object);
+                $data[$property->getName()] = $this->extractSerializableDataFrom($property->getValue($something));
             }
 
             return $data;
         }
 
-        if (is_array($object)) {
+        if (is_array($something)) {
             $data = [];
-            foreach ($object as $element) {
-                $data[] = $this->extract($element);
+            foreach ($something as $element) {
+                $data[] = $this->extractSerializableDataFrom($element);
             }
 
             return $data;
         }
 
-        if (!is_scalar($object)) {
-            throw new \LogicException(sprintf(
-                'You can only serialize objects, arrays and scalar values, got: %s',
-                var_export($object, true)
-            ));
+        if (is_scalar($something) || $something === null) {
+            return $something;
         }
 
-        return $object;
+        throw new \LogicException(sprintf(
+            'Unsupported type: "%s" (%s). You can only serialize objects, arrays and scalar values.',
+            gettype($something),
+            var_export($something, true)
+        ));
     }
 
     private function resolvePropertyType(\ReflectionProperty $property, \ReflectionClass $class) : Type
@@ -157,5 +166,15 @@ final class JsonSerializer
         $propertyType = $varTags[0]->getType();
 
         return $propertyType;
+    }
+
+    private function jsonDecode(string $jsonEncodedData) : array
+    {
+        $decoded = json_decode($jsonEncodedData, true);
+        if ($decoded === null && json_last_error()) {
+            throw new \LogicException('You provided invalid JSON: ' . json_last_error_msg());
+        }
+
+        return $decoded;
     }
 }
