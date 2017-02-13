@@ -4,10 +4,8 @@ declare(strict_types = 1);
 namespace Test\Integration\Common\Persistence;
 
 use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
-use Common\Persistence\CanBePersisted;
 
-final class PersistableDummy implements CanBePersisted
+final class PersistableDummy
 {
     /**
      * @var string

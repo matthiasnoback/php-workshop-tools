@@ -1,0 +1,4 @@
+- Use `JsonSerializer` to serialize publishable domain events (and get rid of the required interface for that?).
+- Add the basic event store implementation from the CQRS workshop repository.
+- Think of something more dev-friendly for `CommandLine\functions`.
+- Add a test for `retry()`.

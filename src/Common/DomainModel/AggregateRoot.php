@@ -32,7 +32,7 @@ trait AggregateRoot
         return $this->events;
     }
 
-    public function clearEvents()
+    public function clearEvents() : void
     {
         $this->events = [];
     }

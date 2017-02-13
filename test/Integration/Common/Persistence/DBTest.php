@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Test\Integration\Common\Persistence;
 
 use Ramsey\Uuid\Uuid;
-use Common\Persistence\DB;
+use Common\Persistence\Database;
 
 class DBTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +12,15 @@ class DBTest extends \PHPUnit_Framework_TestCase
     {
         putenv('DB_PATH=' . getenv('APP_ROOT') . '/var/db');
 
-        // remove all DB files (add a method to DB for that)
+        Database::deleteAll(PersistableDummy::class);
+    }
+
+    /**
+     * @test
+     */
+    public function initially_it_will_return_an_empty_list_of_objects()
+    {
+        $this->assertEquals([], Database::retrieveAll(PersistableDummy::class));
     }
 
     /**
@@ -23,9 +31,9 @@ class DBTest extends \PHPUnit_Framework_TestCase
         $id = Uuid::uuid4();
         $object = new PersistableDummy((string)$id);
 
-        DB::persist($object);
+        Database::persist($object);
 
-        $retrievedObject = DB::retrieve(get_class($object), (string)$id);
+        $retrievedObject = Database::retrieve(get_class($object), (string)$id);
 
         $this->assertEquals($object, $retrievedObject);
     }
@@ -36,7 +44,8 @@ class DBTest extends \PHPUnit_Framework_TestCase
     public function it_throws_an_exception_for_non_persisted_objects()
     {
         $this->expectException(\RuntimeException::class);
-        DB::retrieve(PersistableDummy::class, (string)Uuid::uuid4());
+
+        Database::retrieve(PersistableDummy::class, (string)Uuid::uuid4());
     }
 
     /**
@@ -44,11 +53,9 @@ class DBTest extends \PHPUnit_Framework_TestCase
      */
     public function it_retrieves_all_objects_by_classname()
     {
-        DB::deleteAll(PersistableDummy::class);
+        Database::persist(new PersistableDummy((string)Uuid::uuid4()));
+        Database::persist(new PersistableDummy((string)Uuid::uuid4()));
 
-        DB::persist(new PersistableDummy((string)Uuid::uuid4()));
-        DB::persist(new PersistableDummy((string)Uuid::uuid4()));
-
-        $this->assertCount(2, DB::retrieveAll(PersistableDummy::class));
+        $this->assertCount(2, Database::retrieveAll(PersistableDummy::class));
     }
 }
