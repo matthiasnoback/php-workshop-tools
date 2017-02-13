@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+    base:
+        build: docker/base
+        image: matthiasnoback/php_workshop_base
+
+    simple_webserver:
+        build: docker/simple_webserver
+        image: matthiasnoback/php_workshop_simple_webserver
+        depends_on:
+            - base
+        # example volume:
+        volumes:
+            - ./:/opt
+        # example port:
+        ports:
+            - 80:80
