@@ -2,3 +2,4 @@
 - Add the basic event store implementation from the CQRS workshop repository.
 - Think of something more dev-friendly for `CommandLine\functions`.
 - Add a test for `retry()`.
+- Create images with tags that correspond to the latest git tag.

@@ -3,19 +3,8 @@ sudo: required
 services:
   - docker
 
-env:
-  BRANCH: $TRAVIS_BRANCH
-  DOCKER_COMPOSE_VERSION: 1.11.1
-
-before_install:
-  # Install latest Docker Engine verison
-  - sudo apt-get update
-  - sudo apt-get install docker-engine
-  # Install required Docker Compose version
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
+install:
+  - docker pull matthiasnoback/php_workshop_tools_library_test
 
 script:
-  - ./ci.sh
+  - docker run --rm -v $(pwd):/opt matthiasnoback/php_workshop_tools_library_test

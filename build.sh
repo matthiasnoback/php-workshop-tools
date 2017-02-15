@@ -10,22 +10,21 @@ docker build -t matthiasnoback/php_workshop_tools_simple_webserver docker/simple
 docker build -t matthiasnoback/php_workshop_tools_image_test docker/image_test/
 
 # Run
-docker network create test || true
+docker network create test 2> /dev/null || true
 
 docker run \
     -d \
     --name=simple_webserver \
     --rm \
     --network=test \
-    -p 80:80 \
-    --volumes-from=project_files \
+    -v $(pwd):/opt \
     matthiasnoback/php_workshop_tools_simple_webserver \
-    /opt/docker/image_test/opt/web
+    /opt/docker/image_test/document_root
 
 docker run \
     --rm \
     --network=test \
-    --volumes-from=project_files \
+    -v $(pwd):/opt \
     matthiasnoback/php_workshop_tools_library_test
 library_test_exit_code=$?
 
@@ -50,12 +49,6 @@ if (( library_test_exit_code > 0 )); then
     exit 1;
 fi
 
-if [[ -v BRANCH && "$BRANCH" == "master" ]]; then
-    # Deploy
-    if [[ -v DOCKER_USERNAME && -v DOCKER_PASSWORD ]]; then
-        docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-    fi
-
-    docker push matthiasnoback/php_workshop_tools_base
-    docker push matthiasnoback/php_workshop_tools_simple_webserver
-fi
+docker push matthiasnoback/php_workshop_tools_base
+docker push matthiasnoback/php_workshop_tools_simple_webserver
+docker push matthiasnoback/php_workshop_tools_library_test
