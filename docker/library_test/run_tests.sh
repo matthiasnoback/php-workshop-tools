@@ -2,7 +2,7 @@
 
 set -e
 
-composer install
+composer install --prefer-dist
 ./vendor/bin/phpunit
 
 exit 0;
