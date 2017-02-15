@@ -2,3 +2,4 @@
 - Fix the problem of using project files in sibling containers.
 - Move this image to its own repository (it can be used as a generic build image).
 - Use a smaller image :)
+- Hide unnecessary output from build scripts
