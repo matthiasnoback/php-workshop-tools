@@ -11,19 +11,26 @@ services:
         depends_on:
             - base
         volumes:
-            - ./docker/test/opt:/opt
+            - ./:/opt
+        command: /opt/docker/image_test/opt/web
         ports:
             - 80:80
         networks:
             - test
 
-    test:
-        build: docker/test/
-        image: matthiasnoback/php_workshop_tools_test
+    image_test:
+        build: docker/image_test/
+        image: matthiasnoback/php_workshop_tools_image_test
         depends_on:
             - simple_webserver
         networks:
             - test
+
+    library_test:
+        build: docker/library_test/
+        image: matthiasnoback/php_workshop_tools_library_test
+        volumes:
+            - ./:/opt
 
 networks:
     test:

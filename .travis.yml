@@ -3,15 +3,15 @@ sudo: required
 services:
   - docker
 
-language: php
+env:
+  BRANCH: $TRAVIS_BRANCH
+  DOCKER_COMPOSE_VERSION: 1.11.1
 
-matrix:
-  include:
-    - php: 7.1
-
-install:
-  - composer install
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
 
 script:
-  - vendor/bin/phpunit
-  - ./build-images.sh
+  - ./build.sh

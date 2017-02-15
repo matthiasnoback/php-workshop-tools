@@ -13,6 +13,8 @@ final class AggregateRootTest extends \PHPUnit_Framework_TestCase
      */
     public function it_can_record_and_clear_events()
     {
+        $this->fail();
+        
         $aggregateRoot = new DummyAggregateRoot();
         $event1 = new DummyDomainEvent();
         $aggregateRoot->recordThisEvent($event1);

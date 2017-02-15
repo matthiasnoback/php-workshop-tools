@@ -1,0 +1,4 @@
+- Use this build image instead of Travis's own Docker/Docker Compose install.
+- Fix the problem of using project files in sibling containers.
+- Move this image to its own repository (it can be used as a generic build image).
+- Use a smaller image :)

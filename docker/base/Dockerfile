@@ -6,7 +6,7 @@ COPY config/php/app.ini ${PHP_INI_DIR}/conf.d/20-app.ini
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install and configure XDebug
-RUN pecl install xdebug && docker-php-ext-enable xdebug
+RUN pecl install xdebug
 COPY config/php/xdebug.ini ${PHP_INI_DIR}/conf.d/xdebug.ini
 
 # Prepare for mounting the project's code as a volume
