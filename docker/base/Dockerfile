@@ -15,7 +15,7 @@ RUN DEBIAN_FRONTEND=noninteractive && \
 
 # Install and configure XDebug
 RUN pecl install xdebug
-COPY config/php/xdebug.ini ${PHP_INI_DIR}/conf.d/xdebug.ini
+COPY config/php/xdebug.ini ${PHP_INI_DIR}/conf.d/ext-xdebug.ini
 
 # Prepare for mounting the project's code as a volume
 VOLUME /opt

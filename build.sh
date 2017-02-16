@@ -49,6 +49,6 @@ if (( library_test_exit_code > 0 )); then
     exit 1;
 fi
 
-docker push matthiasnoback/php_workshop_tools_base
-docker push matthiasnoback/php_workshop_tools_simple_webserver
-docker push matthiasnoback/php_workshop_tools_library_test
+#docker push matthiasnoback/php_workshop_tools_base
+#docker push matthiasnoback/php_workshop_tools_simple_webserver
+#docker push matthiasnoback/php_workshop_tools_library_test

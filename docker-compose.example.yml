@@ -1,0 +1,19 @@
+# example
+version: '3'
+
+services:
+    website:
+        image: matthiasnoback/php_workshop_tools_simple_webserver
+        command: /opt/docker/image_test/document_root
+        volumes:
+            - ./:/opt
+        ports:
+            - 80:80
+        environment:
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP} remote_log=/dev/stdout"
+        networks:
+            - default
+
+networks:
+    default:
+        driver: bridge
