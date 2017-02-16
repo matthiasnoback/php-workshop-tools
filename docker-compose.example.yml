@@ -11,6 +11,8 @@ services:
             - 80:80
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP} remote_log=/dev/stdout"
+
+        stop_signal: SIGINT
         networks:
             - default
 

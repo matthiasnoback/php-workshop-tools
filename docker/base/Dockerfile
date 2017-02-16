@@ -14,8 +14,11 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     mv composer.phar /usr/local/bin/composer
 
 # Install and configure XDebug
-RUN pecl install xdebug
-COPY config/php/xdebug.ini ${PHP_INI_DIR}/conf.d/ext-xdebug.ini
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+COPY config/php/xdebug.ini ${PHP_INI_DIR}/conf.d/xdebug.ini
+
+# Enable signal handling
+RUN docker-php-ext-install pcntl
 
 # Prepare for mounting the project's code as a volume
 VOLUME /opt
