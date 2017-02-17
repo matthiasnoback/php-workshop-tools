@@ -29,7 +29,7 @@ class DBTest extends \PHPUnit_Framework_TestCase
     public function it_persists_and_retrieves_objects_by_their_id()
     {
         $id = Uuid::uuid4();
-        $object = new PersistableDummy((string)$id);
+        $object = new PersistableDummy(new DummyId((string)$id));
 
         Database::persist($object);
 
@@ -53,8 +53,8 @@ class DBTest extends \PHPUnit_Framework_TestCase
      */
     public function it_retrieves_all_objects_by_classname()
     {
-        Database::persist(new PersistableDummy((string)Uuid::uuid4()));
-        Database::persist(new PersistableDummy((string)Uuid::uuid4()));
+        Database::persist(new PersistableDummy(new DummyId((string)Uuid::uuid4())));
+        Database::persist(new PersistableDummy(new DummyId((string)Uuid::uuid4())));
 
         $this->assertCount(2, Database::retrieveAll(PersistableDummy::class));
     }

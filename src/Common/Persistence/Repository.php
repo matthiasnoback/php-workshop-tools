@@ -7,6 +7,7 @@ use Assert\Assertion;
 use function Common\CommandLine\line;
 use function Common\CommandLine\make_cyan;
 use function Common\CommandLine\stdout;
+use function DuckTyping\Object;
 use NaiveSerializer\JsonSerializer;
 
 final class Repository
@@ -34,14 +35,11 @@ final class Repository
     /**
      * Provide an object that can be persisted (its `id()` method should return a string identifier. It will be serialized to disk.
      *
-     * @param object $object
+     * @param Entity $object
      * @return void
      */
-    public function persist($object) : void
+    public function persist(Entity $object): void
     {
-        Assertion::isObject($object);
-        Assertion::isCallable([$object, 'id']);
-
         $id = (string)$object->id();
 
         $allData = $this->loadAllObjects();
@@ -101,7 +99,7 @@ final class Repository
      *
      * @return array A list of objects of type $className
      */
-    private function loadAllObjects() : array
+    private function loadAllObjects(): array
     {
         if (!file_exists($this->databaseFilePath)) {
             return [];
@@ -120,7 +118,7 @@ final class Repository
      * @param array $allData
      * @return void
      */
-    private function saveAllObjects(array $allData) : void
+    private function saveAllObjects(array $allData): void
     {
         file_put_contents($this->databaseFilePath, JsonSerializer::serialize($allData));
     }
