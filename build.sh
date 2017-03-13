@@ -52,5 +52,4 @@ fi
 if [[ "$1" == "push" ]]; then
     docker push matthiasnoback/php_workshop_tools_base
     docker push matthiasnoback/php_workshop_tools_simple_webserver
-    docker push matthiasnoback/php_workshop_tools_library_test
 fi
