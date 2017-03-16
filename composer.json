@@ -6,7 +6,7 @@
         "ramsey/uuid": "^3.4",
         "symfony/var-dumper": "^3.2",
         "beberlei/assert": "^2.7",
-        "matthiasnoback/naive-serializer": "^0.3"
+        "matthiasnoback/naive-serializer": "^0.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.5"
