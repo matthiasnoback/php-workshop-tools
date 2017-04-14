@@ -7,8 +7,7 @@ use Assert\Assertion;
 use function Common\CommandLine\line;
 use function Common\CommandLine\make_cyan;
 use function Common\CommandLine\stdout;
-use function DuckTyping\Object;
-use NaiveSerializer\JsonSerializer;
+use NaiveSerializer\Serializer;
 
 final class Repository
 {
@@ -105,7 +104,7 @@ final class Repository
             return [];
         }
 
-        $objects = JsonSerializer::deserialize("{$this->className}[]", file_get_contents($this->databaseFilePath));
+        $objects = Serializer::deserialize("{$this->className}[]", file_get_contents($this->databaseFilePath));
 
         Assertion::allIsInstanceOf($objects, $this->className);
 
@@ -120,6 +119,6 @@ final class Repository
      */
     private function saveAllObjects(array $allData): void
     {
-        file_put_contents($this->databaseFilePath, JsonSerializer::serialize($allData));
+        file_put_contents($this->databaseFilePath, Serializer::serialize($allData));
     }
 }

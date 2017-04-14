@@ -4,10 +4,10 @@
 set -e
 
 # Build
-docker build -t matthiasnoback/php_workshop_tools_base docker/base/
-docker build -t matthiasnoback/php_workshop_tools_library_test docker/library_test/
-docker build -t matthiasnoback/php_workshop_tools_simple_webserver docker/simple_webserver/
-docker build -t matthiasnoback/php_workshop_tools_image_test docker/image_test/
+docker build --no-cache -t matthiasnoback/php_workshop_tools_base docker/base/
+docker build --no-cache -t matthiasnoback/php_workshop_tools_simple_webserver docker/simple_webserver/
+docker build --no-cache -t matthiasnoback/php_workshop_tools_library_test docker/library_test/
+docker build --no-cache -t matthiasnoback/php_workshop_tools_image_test docker/image_test/
 
 # Run
 docker network create test 2> /dev/null || true
