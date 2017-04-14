@@ -6,43 +6,49 @@ Take [`docker-compose.example.yml`](docker-compose.example.yml) as an example fo
 
 ## Required environment variables
 
-You'll need to export the following environment variables:
+First, set up an "alias loopback IP":
+
+```
+sudo ifconfig lo0 alias 10.254.254.254
+```
+
+Export either the alias loopback IP or the IP of your machine on the local network (e.g. `192.x.x.x` or `10.x.x.x`) as the `DOCKER_HOST_IP` environment variable:
+
+```
+export DOCKER_HOST_IP=10.254.254.254
+```
+
+You'll need to export the following environment variables too:
 
 ```bash
 export HOST_GID=$(id -g)
 export HOST_UID=$(id -u)
-export COMPOSER_HOME="$HOME/.composer"
+export COMPOSER_HOME="${HOME}/.composer"
 ```
+
+To make these environment variables always available, you could add these `export ...` lines to your `~/.bash_profile` file.
 
 ## Setting up XDebug with PhpStorm
 
-- (Only on Mac) Set up an "alias loopback IP":
+For each PHP-based service defined in your `docker-compose.yml`, you should take the following steps:
 
-    ```
-    sudo ifconfig lo0 alias 10.254.254.254
-    ```
-
-- Export either the alias loopback IP (on Mac) or the IP of your machine on the local network (e.g. `192.x.x.x` or `10.x.x.x`) as the `DOCKER_HOST_IP` environment variable:
-
-    ```
-    export DOCKER_HOST_IP=10.254.254.254
-    ```
-
-- In PhpStorm go to `Preferences - Languages & Frameworks - PHP - Servers` create a new server named `docker`, using host `0.0.0.0`, port `8080`. Then select the root directory of the project and type in the absolute path of this directory inside the Docker container (i.e. `/opt`).
-- In `docker-compose.yml` define a `PHP_IDE_CONFIG` environment variable with the name of the server (the one you provided in the previous step).
-- Also define an `XDEBUG_CONFIG` environment variable. The `remote_log` setting is optional; it will print debug information to `stdout`, which will be helpful in case you have trouble setting up XDebug:
+- In PhpStorm go to `Preferences - Languages & Frameworks - PHP - Servers` create a new server with the same name as the service itself in `docker-compose.yml`, using host `0.0.0.0`, and the host port (e.g. `8080`). Then select the root directory of the project and in the right column type in the absolute path of the project directory *inside* the Docker container (i.e. `/opt`).
+- Make sure that in `docker-compose.yml` the `PHP_IDE_CONFIG` environment variable has been defined containing the name of the server (the same one you provided in the previous step).
+- Also make sure you have defined an `XDEBUG_CONFIG` environment variable for the service in `docker-compose.yml`. (The `remote_log` setting is optional; it will print debug information to `stdout`, which will be helpful in case you have trouble setting up XDebug.)
 
     ```yaml
     services:
         website:
             image: matthiasnoback/php_workshop_tools_simple_webserver
+            ports:
+                - 8080:80
             # ...
             environment:
-                PHP_IDE_CONFIG: "serverName=docker"
+                PHP_IDE_CONFIG: "serverName=website"
                 XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP} remote_log=/dev/stdout"
     ```
 
 - In PhpStorm go to `Preferences - Languages & Frameworks - PHP - Debug` and make sure you listen to port 9000.
 - In PhpStorm select `Run - Start listening for PHP Debug Connections`.
-- In PhpStorm set a breakpoint in for example the `index.php` of the website. Optionally select `Run - Break at first line in PHP scripts`.
+- In PhpStorm set a breakpoint in - for example - the `index.php` of the website. Optionally select `Run - Break at first line in PHP scripts`.
 - Now run the service and request the index page. PhpStorm should show a dialogue asking you to accept an incoming debug connection.
