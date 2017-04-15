@@ -12,6 +12,7 @@ function retry(int $remainingAttempts, int $waitMs, callable $action)
             throw $fault;
         }
 
+        error_log((string)$fault);
         usleep($waitMs * 1000);
         retry($remainingAttempts - 1, $waitMs, $action);
     }
