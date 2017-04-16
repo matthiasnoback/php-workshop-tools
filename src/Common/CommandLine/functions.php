@@ -3,24 +3,43 @@ declare(strict_types=1);
 
 namespace Common\CommandLine;
 
-function stdout(string $string)
+function stdout(string... $strings)
 {
-    write_to(fopen('php://stdout', 'w'), $string);
+    write_to(fopen('php://stdout', 'wb'), $strings);
 }
 
-function stderr(string $string)
+function stderr(string... $strings)
 {
-    write_to(fopen('php://stderr', 'w'), $string);
+    write_to(fopen('php://stderr', 'wb'), $strings);
 }
 
-function write_to($handle, string $string)
+function write_to($handle, array $strings)
 {
-    fwrite($handle, date('H:i:s') . ' ' . $string);
+    $timestamp = date('H:i:s') . ' ';
+    foreach ($strings as $index => $string) {
+        if ($index === 0) {
+            $writeString = $timestamp . $string;
+        } else {
+            $writeString = indent($string, strlen($timestamp));
+        }
+        fwrite($handle, $writeString . "\n");
+    }
+}
+
+function indent(string $string, int $indent): string
+{
+    $lines = explode("\n", $string);
+
+    $indentedLines = array_map(function (string $line) use ($indent) {
+        return str_repeat(' ', $indent) . $line;
+    }, $lines);
+
+    return implode("\n", $indentedLines);
 }
 
 function line(string... $strings) : string
 {
-    return implode(' ', $strings) . "\n";
+    return implode(' ', $strings);
 }
 
 function make_green(string $string) : string
