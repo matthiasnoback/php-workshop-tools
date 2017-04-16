@@ -49,6 +49,7 @@ For each PHP-based service defined in your `docker-compose.yml`, you should take
     ```
 
 - In PhpStorm go to `Preferences - Languages & Frameworks - PHP - Debug` and make sure you listen to port 9000.
+- On the same page, increase the number of "Max. simultaneous connections" (to allow debugging multiple PHP services at the same time).
 - In PhpStorm select `Run - Start listening for PHP Debug Connections`.
 - In PhpStorm set a breakpoint in - for example - the `index.php` of the website. Optionally select `Run - Break at first line in PHP scripts`.
 - Now run the service and request the index page. PhpStorm should show a dialogue asking you to accept an incoming debug connection.
