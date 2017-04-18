@@ -4,9 +4,6 @@ declare(strict_types = 1);
 namespace Common\Persistence;
 
 use Assert\Assertion;
-use function Common\CommandLine\line;
-use function Common\CommandLine\make_cyan;
-use function Common\CommandLine\stdout;
 
 class Database
 {
@@ -15,7 +12,7 @@ class Database
     /**
      * @see Repository::persist()
      *
-     * @param object $object
+     * @param Entity|object $object
      * @return void
      */
     public static function persist($object) : void

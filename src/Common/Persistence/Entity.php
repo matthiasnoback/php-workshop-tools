@@ -5,5 +5,8 @@ namespace Common\Persistence;
 
 interface Entity
 {
-    public function id() : Id;
+    /**
+     * @return string Or object with __toString() method
+     */
+    public function id();
 }

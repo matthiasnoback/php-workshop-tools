@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Common\EventSourcing\EventStore;
 
@@ -9,17 +9,8 @@ use Ramsey\Uuid\Uuid;
 
 final class EventStore
 {
-    /**
-     * @var StorageFacility
-     */
     private $storageFacility;
-    /**
-     * @var EventDispatcher
-     */
     private $eventDispatcher;
-    /**
-     * @var JsonSerializer
-     */
     private $serializer;
 
     public function __construct(StorageFacility $storageFacility, EventDispatcher $eventDispatcher, JsonSerializer $serializer)
@@ -32,35 +23,33 @@ final class EventStore
     public function append(string $aggregateType, string $aggregateId, array $events): void
     {
         foreach ($events as $event) {
-            $id = (string)Uuid::uuid4();
-            $eventType = get_class($event);
-            $payload = $this->extractPayload($event);
-            $now = new \DateTimeImmutable();
-            // create a sortable representation
-            $createdAt = $now->format('Y-m-d H:i:s ') . str_pad($now->format('u'), 6, '0');
-            $this->storageFacility->persistRawEvent(
-                [
-                    'event_type' => $eventType,
-                    'event_id' => $id,
-                    'payload' => $payload,
-                    'aggregate_type' => $aggregateType,
-                    'aggregate_id' => (string)$aggregateId,
-                    'created_at' => $createdAt
-                ]
-            );
+            $envelope = $this->wrapInEnvelope($aggregateType, $aggregateId, $event);
+            $this->storageFacility->append($envelope);
 
             $this->eventDispatcher->dispatch($event);
         }
     }
 
-    /**
-     * @param string $aggregateType
-     * @param string $aggregateId
-     * @return \Iterator
-     */
+    private function wrapInEnvelope(string $aggregateType, string $aggregateId, $event): EventEnvelope
+    {
+        $id = (string)Uuid::uuid4();
+        $eventType = get_class($event);
+        $payload = $this->extractPayload($event);
+        $now = new \DateTimeImmutable();
+
+        return new EventEnvelope(
+            $id,
+            $aggregateType,
+            $aggregateId,
+            $eventType,
+            $now,
+            $payload
+        );
+    }
+
     public function loadEvents(string $aggregateType, string $aggregateId): \Iterator
     {
-        foreach ($this->storageFacility->loadRawEvents($aggregateType, $aggregateId) as $rawEvent) {
+        foreach ($this->storageFacility->loadEventsOf($aggregateType, $aggregateId) as $rawEvent) {
             yield $this->restoreEvent($rawEvent);
         }
     }
@@ -72,17 +61,12 @@ final class EventStore
      */
     public function replayHistory(EventDispatcher $eventDispatcher): void
     {
-        $allEvents = $this->storageFacility->loadAllRawEvents();
+        $allEvents = $this->storageFacility->loadAllEvents();
         foreach ($allEvents as $rawEvent) {
             $eventDispatcher->dispatch($this->restoreEvent($rawEvent));
         }
     }
 
-    /**
-     * @param string $aggregateType
-     * @param string $aggregateId
-     * @return object Of type $aggregateType
-     */
     public function reconstitute(string $aggregateType, string $aggregateId)
     {
         return call_user_func([$aggregateType, 'reconstitute'], $this->loadEvents($aggregateType, $aggregateId));
@@ -94,11 +78,11 @@ final class EventStore
     }
 
     /**
-     * @param array $rawEvent
-     * @return object Of type $rawEvent['event_type']
+     * @param EventEnvelope $eventEnvelope
+     * @return object Of type $eventEnvelope->eventType()
      */
-    private function restoreEvent(array $rawEvent)
+    private function restoreEvent(EventEnvelope $eventEnvelope)
     {
-        return $this->serializer->deserialize($rawEvent['event_type'], $rawEvent['payload']);
+        return $this->serializer->deserialize($eventEnvelope->eventType(), $eventEnvelope->payload());
     }
 }

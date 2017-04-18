@@ -5,25 +5,11 @@ namespace Common\EventSourcing\EventStore;
 
 interface StorageFacility
 {
-    /**
-     * @return void
-     */
-    public function setUp(): void;
+    public function loadEventsOf(string $aggregateType, string $aggregateId): \Iterator;
 
-    /**
-     * @param string $aggregateType
-     * @param string $aggregateId
-     * @return \Iterator
-     */
-    public function loadRawEvents(string $aggregateType, string $aggregateId): \Iterator;
+    public function loadAllEvents(): \Iterator;
 
-    /**
-     * @return \Iterator
-     */
-    public function loadAllRawEvents(): \Iterator;
+    public function append(EventEnvelope $eventEnvelope): void;
 
-    /**
-     * @param array $rawEventData
-     */
-    public function persistRawEvent(array $rawEventData): void;
+    public function deleteAll(): void;
 }

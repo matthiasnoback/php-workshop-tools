@@ -10,8 +10,6 @@ class DBTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        putenv('DB_PATH=' . getenv('APP_ROOT') . '/var/db');
-
         Database::deleteAll(PersistableDummy::class);
     }
 

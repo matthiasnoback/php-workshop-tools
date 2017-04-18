@@ -34,10 +34,10 @@ final class Repository
     /**
      * Provide an object that can be persisted (its `id()` method should return a string identifier. It will be serialized to disk.
      *
-     * @param Entity $object
+     * @param Entity|object $object
      * @return void
      */
-    public function persist(Entity $object): void
+    public function persist($object): void
     {
         $id = (string)$object->id();
 

@@ -6,7 +6,7 @@ namespace Test\Integration\Common\EventSourcing;
 use Common\EventDispatcher\EventDispatcher;
 use Common\EventSourcing\Aggregate\Repository\EventSourcedAggregateRepository;
 use Common\EventSourcing\EventStore\EventStore;
-use Common\EventSourcing\EventStore\Storage\FlywheelStorageFacility;
+use Common\EventSourcing\EventStore\Storage\DatabaseStorageFacility;
 use NaiveSerializer\JsonSerializer;
 use Ramsey\Uuid\Uuid;
 
@@ -29,9 +29,8 @@ final class EventSourcedAggregateRepositoryTest extends \PHPUnit_Framework_TestC
 
     protected function setUp()
     {
-        $dbDirectory = dirname(__DIR__ . '/../../../../var/db');
-        $storageFacility = new FlywheelStorageFacility($dbDirectory);
-        $storageFacility->reset();
+        $storageFacility = new DatabaseStorageFacility();
+        $storageFacility->deleteAll();
 
         $this->eventDispatcher = new EventDispatcher();
         $this->eventStore = new EventStore($storageFacility, $this->eventDispatcher, new JsonSerializer());
