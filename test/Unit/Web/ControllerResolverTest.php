@@ -21,10 +21,10 @@ class ControllerResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_returns_the_method_that_matches_the_request_uri()
+    public function it_returns_the_method_that_matches_path_info_from_the_request()
     {
         $controller = ControllerResolver::resolve(
-            ['REQUEST_URI' => '/some'],
+            ['PATH_INFO' => '/some'],
             [],
             $this->application
         );
@@ -44,7 +44,7 @@ class ControllerResolverTest extends \PHPUnit_Framework_TestCase
         $get = ['id' => '1', 'orderId' => '123'];
 
         $controller = ControllerResolver::resolve(
-            ['REQUEST_URI' => '/withArguments'],
+            ['PATH_INFO' => '/withArguments'],
             $get,
             $this->application
         );

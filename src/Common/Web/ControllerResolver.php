@@ -23,7 +23,7 @@ final class ControllerResolver
     {
         Assertion::isObject($application, '$application should be an object containing public "[route]Controller" methods.');
 
-        $route = trim($server['REQUEST_URI'], '/');
+        $route = trim($server['PATH_INFO'], '/');
         $controllerMethod = [$application, $route . 'Controller'];
 
         if (empty($route) || !is_callable($controllerMethod)) {
