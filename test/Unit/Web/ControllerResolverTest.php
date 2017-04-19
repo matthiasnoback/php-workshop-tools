@@ -55,4 +55,41 @@ class ControllerResolverTest extends \PHPUnit_Framework_TestCase
             $controller()
         );
     }
+
+    /**
+     * @test
+     * @bugfix
+     */
+    public function it_deals_with_undefined_path_info()
+    {
+        $controller = ControllerResolver::resolve(
+            [],
+            [],
+            $this->application
+        );
+
+        $this->assertTrue(is_callable($controller));
+    }
+
+    /**
+     * @test
+     */
+    public function it_shows_alternative_routes()
+    {
+        $controller = ControllerResolver::resolve(
+            ['PATH_INFO' => '/unknown'],
+            [],
+            $this->application
+        );
+
+        ob_start();
+        $controller();
+        $response = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertContains('/some', $response);
+        $this->assertContains('/withArguments', $response);
+
+        echo $response;
+    }
 }

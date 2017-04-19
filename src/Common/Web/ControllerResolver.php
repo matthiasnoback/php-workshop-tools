@@ -23,19 +23,41 @@ final class ControllerResolver
     {
         Assertion::isObject($application, '$application should be an object containing public "[route]Controller" methods.');
 
-        $route = trim($server['PATH_INFO'], '/');
+        $route = trim($server['PATH_INFO'] ?? '', '/');
         $controllerMethod = [$application, $route . 'Controller'];
 
         if (empty($route) || !is_callable($controllerMethod)) {
-            return function() {
-                error_log('ControllerResolver: No matching controller method, create 404 response');
-                header('Content-Type: text/plain', true, 404);
-                echo 'Page not found';
-            };
+            return self::create404Controller($application);
         }
 
-        return function() use ($controllerMethod, $get) {
+        return function () use ($controllerMethod, $get) {
             return call_user_func_array($controllerMethod, $get);
+        };
+    }
+
+    private static function create404Controller($application): callable
+    {
+        return function () use ($application) {
+            error_log('ControllerResolver: No matching controller method, create 404 response');
+            if (PHP_SAPI !== 'cli') {
+                header('Content-Type: text/plain', true, 404);
+            }
+            echo "Page not found\n";
+
+            $controllerMethods = array_filter(get_class_methods($application), function (string $methodName) {
+                return substr($methodName, -10) === 'Controller';
+            });
+
+            $uris = array_map(function(string $methodName) {
+                return '/' . substr($methodName, 0, -10);
+            }, $controllerMethods);
+
+            if (!empty($uris)) {
+                echo "\nYou could try:\n";
+                foreach ($uris as $uri) {
+                    echo "- $uri\n";
+                }
+            }
         };
     }
 }
