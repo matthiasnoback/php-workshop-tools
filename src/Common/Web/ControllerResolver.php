@@ -28,6 +28,7 @@ final class ControllerResolver
 
         if (empty($route) || !is_callable($controllerMethod)) {
             return function() {
+                error_log('ControllerResolver: No matching controller method, create 404 response');
                 header('Content-Type: text/plain', true, 404);
                 echo 'Page not found';
             };
