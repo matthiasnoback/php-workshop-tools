@@ -5,9 +5,9 @@ namespace Common\EventSourcing\EventStore;
 
 interface StorageFacility
 {
-    public function loadEventsOf(string $aggregateType, string $aggregateId): \Iterator;
+    public function loadEventsOf(string $aggregateType, string $aggregateId): array;
 
-    public function loadAllEvents(): \Iterator;
+    public function loadAllEvents(): array;
 
     public function append(EventEnvelope $eventEnvelope): void;
 

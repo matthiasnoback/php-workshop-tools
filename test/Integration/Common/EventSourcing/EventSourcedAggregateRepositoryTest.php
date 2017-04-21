@@ -108,4 +108,15 @@ final class EventSourcedAggregateRepositoryTest extends \PHPUnit_Framework_TestC
             $dispatchedEvents
         );
     }
+
+    /**
+     * @test
+     */
+    public function when_no_previous_events_are_known_it_fails_to_reconstitute()
+    {
+        $unknownId = (string)Uuid::uuid4();
+
+        $this->expectException(\RuntimeException::class);
+        $this->eventStore->reconstitute(DummyAggregateRoot::class, $unknownId);
+    }
 }

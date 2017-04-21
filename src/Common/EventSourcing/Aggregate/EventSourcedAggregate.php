@@ -19,8 +19,8 @@ interface EventSourcedAggregate
     public function popRecordedEvents();
 
     /**
-     * @param \Iterator $events
+     * @param array $events
      * @return static
      */
-    public static function reconstitute(\Iterator $events);
+    public static function reconstitute(array $events);
 }

@@ -47,11 +47,15 @@ final class EventStore
         );
     }
 
-    public function loadEvents(string $aggregateType, string $aggregateId): \Iterator
+    public function loadEvents(string $aggregateType, string $aggregateId): array
     {
+        $events = [];
+
         foreach ($this->storageFacility->loadEventsOf($aggregateType, $aggregateId) as $rawEvent) {
-            yield $this->restoreEvent($rawEvent);
+            $events[] = $this->restoreEvent($rawEvent);
         }
+
+        return $events;
     }
 
     /**
@@ -69,7 +73,17 @@ final class EventStore
 
     public function reconstitute(string $aggregateType, string $aggregateId)
     {
-        return call_user_func([$aggregateType, 'reconstitute'], $this->loadEvents($aggregateType, $aggregateId));
+        $events = $this->loadEvents($aggregateType, $aggregateId);
+
+        if (empty($events)) {
+            throw new \RuntimeException(sprintf(
+                'Aggregate "%s:%s" not found',
+                $aggregateType,
+                $aggregateId
+            ));
+        }
+
+        return call_user_func([$aggregateType, 'reconstitute'], $events);
     }
 
     private function extractPayload($event): string

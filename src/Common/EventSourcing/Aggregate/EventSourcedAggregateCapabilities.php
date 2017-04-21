@@ -44,7 +44,7 @@ trait EventSourcedAggregateCapabilities
         return $id;
     }
 
-    public static function reconstitute(\Iterator $events)
+    public static function reconstitute(array $events)
     {
         $instance = new static();
 

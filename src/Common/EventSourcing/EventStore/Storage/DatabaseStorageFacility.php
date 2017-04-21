@@ -9,9 +9,9 @@ use Common\Persistence\Database;
 
 final class DatabaseStorageFacility implements StorageFacility
 {
-    public function loadEventsOf(string $aggregateType, string $aggregateId): \Iterator
+    public function loadEventsOf(string $aggregateType, string $aggregateId): array
     {
-        return new \CallbackFilterIterator(
+        return array_filter(
             $this->loadAllEvents(),
             function (EventEnvelope $eventEnvelope) use ($aggregateId, $aggregateType) {
                 return $eventEnvelope->aggregateType() === $aggregateType
@@ -20,11 +20,9 @@ final class DatabaseStorageFacility implements StorageFacility
         );
     }
 
-    public function loadAllEvents(): \Iterator
+    public function loadAllEvents(): array
     {
-        return new \ArrayIterator(
-            Database::retrieveAll(EventEnvelope::class)
-        );
+        return Database::retrieveAll(EventEnvelope::class);
     }
 
     public function append(EventEnvelope $eventEnvelope): void
