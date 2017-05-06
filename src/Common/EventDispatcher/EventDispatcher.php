@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Common\EventDispatcher;
 
@@ -32,6 +32,13 @@ final class EventDispatcher
 
         foreach ($eventSubscribers as $eventSubscriber) {
             $eventSubscriber($event);
+        }
+    }
+
+    public function dispatchAll(array $events): void
+    {
+        foreach ($events as $event) {
+            $this->dispatch($event);
         }
     }
 }

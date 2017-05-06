@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Unit\Common\EventDispatcher;
 
@@ -35,6 +35,32 @@ final class EventDispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             ['subscriber3', 'subscriber1'],
             $notifiedSubscribers
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_dispatches_all_given_events_()
+    {
+        $dispatcher = new EventDispatcher();
+        $events = [
+            new \stdClass(),
+            new \stdClass()
+        ];
+
+        $receivedEvents = [];
+        $subscriber = function ($event) use (&$receivedEvents) {
+            $receivedEvents[] = $event;
+        };
+
+        $dispatcher->subscribeToAllEvents($subscriber);
+
+        $dispatcher->dispatchAll($events);
+
+        $this->assertSame(
+            $events,
+            $receivedEvents
         );
     }
 }
