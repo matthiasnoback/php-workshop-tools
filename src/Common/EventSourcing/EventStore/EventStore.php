@@ -76,11 +76,10 @@ final class EventStore
         $events = $this->loadEvents($aggregateType, $aggregateId);
 
         if (empty($events)) {
-            throw new \RuntimeException(sprintf(
-                'Aggregate "%s:%s" not found',
+            throw AggregateNotFound::withClassAndId(
                 $aggregateType,
                 $aggregateId
-            ));
+            );
         }
 
         return call_user_func([$aggregateType, 'reconstitute'], $events);

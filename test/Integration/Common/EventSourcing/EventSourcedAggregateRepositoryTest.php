@@ -5,6 +5,7 @@ namespace Test\Integration\Common\EventSourcing;
 
 use Common\EventDispatcher\EventDispatcher;
 use Common\EventSourcing\Aggregate\Repository\EventSourcedAggregateRepository;
+use Common\EventSourcing\EventStore\AggregateNotFound;
 use Common\EventSourcing\EventStore\EventStore;
 use Common\EventSourcing\EventStore\Storage\DatabaseStorageFacility;
 use NaiveSerializer\JsonSerializer;
@@ -116,7 +117,7 @@ final class EventSourcedAggregateRepositoryTest extends \PHPUnit_Framework_TestC
     {
         $unknownId = (string)Uuid::uuid4();
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(AggregateNotFound::class);
         $this->eventStore->reconstitute(DummyAggregateRoot::class, $unknownId);
     }
 }
