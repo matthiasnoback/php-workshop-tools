@@ -6,19 +6,7 @@ Take [`docker-compose.example.yml`](docker-compose.example.yml) as an example fo
 
 ## Required environment variables
 
-First, set up an "alias loopback IP":
-
-```
-sudo ifconfig lo0 alias 10.254.254.254
-```
-
-Export either the alias loopback IP or the IP of your machine on the local network (e.g. `192.x.x.x` or `10.x.x.x`) as the `DOCKER_HOST_IP` environment variable:
-
-```
-export DOCKER_HOST_IP=10.254.254.254
-```
-
-You'll need to export the following environment variables too:
+You'll need to export the following environment variables:
 
 ```bash
 export HOST_GID=$(id -g)
@@ -26,9 +14,33 @@ export HOST_UID=$(id -u)
 export COMPOSER_HOME="${HOME}/.composer"
 ```
 
-To make these environment variables always available, you could add these `export ...` lines to your `~/.bash_profile` file.
+To make these always available, you could add the above lines to your `~/.bash_profile` file.
 
-## Setting up XDebug with PhpStorm
+## Optional environment variables
+
+You only need to provide the `DOCKER_HOST_IP` environment variable if you want to use XDebug for step debugging.
+
+### When using Docker for Mac
+
+```
+export DOCKER_HOST_IP=docker.for.mac.localhost
+```
+
+### When using Docker for Windows
+
+```
+export DOCKER_HOST_IP=docker.for.windowss.localhost
+```
+
+### When using Linux
+
+Export the IP of your machine on the local network (e.g. `192.x.x.x` or `10.x.x.x`) as the `DOCKER_HOST_IP` environment variable, e.g.
+
+```
+export DOCKER_HOST_IP=192.168.1.33
+```
+
+## Setting up XDebug with PhpStorm (optional)
 
 For each PHP-based service defined in your `docker-compose.yml`, you should take the following steps:
 
