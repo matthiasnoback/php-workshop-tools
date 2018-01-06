@@ -23,6 +23,7 @@ trait AggregateId
     public static function fromString(string $id)
     {
         Assertion::notEmpty($id);
+        Assertion::uuid($id);
 
         $aggregateId = new static();
         $aggregateId->id = $id;

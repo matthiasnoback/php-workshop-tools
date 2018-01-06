@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Common\Persistence;
 
@@ -26,8 +26,7 @@ final class Repository
         Assertion::classExists($className);
         $this->className = $className;
 
-        Assertion::directory(dirname($databaseFilePath));
-        Assertion::writeable(dirname($databaseFilePath));
+        Filesystem::ensureFilePathIsWritable($databaseFilePath);
         $this->databaseFilePath = $databaseFilePath;
     }
 
@@ -116,9 +115,14 @@ final class Repository
      *
      * @param array $allData
      * @return void
+     * @throws \RuntimeException
      */
     private function saveAllObjects(array $allData): void
     {
-        file_put_contents($this->databaseFilePath, Serializer::serialize($allData));
+        $fileSaved = @file_put_contents($this->databaseFilePath, Serializer::serialize($allData));
+
+        if ($fileSaved === false) {
+            throw new \RuntimeException(sprintf('Failed to save file "%s"', $this->databaseFilePath));
+        }
     }
 }
