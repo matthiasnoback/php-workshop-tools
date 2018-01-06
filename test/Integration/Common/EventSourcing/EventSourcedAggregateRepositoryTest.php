@@ -9,9 +9,10 @@ use Common\EventSourcing\EventStore\AggregateNotFound;
 use Common\EventSourcing\EventStore\EventStore;
 use Common\EventSourcing\EventStore\Storage\DatabaseStorageFacility;
 use NaiveSerializer\JsonSerializer;
+use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
-final class EventSourcedAggregateRepositoryTest extends \PHPUnit_Framework_TestCase
+final class EventSourcedAggregateRepositoryTest extends TestCase
 {
     /**
      * @var EventSourcedAggregateRepository

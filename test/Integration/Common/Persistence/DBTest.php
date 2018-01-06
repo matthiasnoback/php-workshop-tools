@@ -3,10 +3,11 @@ declare(strict_types = 1);
 
 namespace Test\Integration\Common\Persistence;
 
+use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Common\Persistence\Database;
 
-class DBTest extends \PHPUnit_Framework_TestCase
+class DBTest extends TestCase
 {
     protected function setUp()
     {

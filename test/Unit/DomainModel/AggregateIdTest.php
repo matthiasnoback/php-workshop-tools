@@ -3,9 +3,10 @@ declare(strict_types = 1);
 
 namespace Test\Unit\DomainModel;
 
+use PHPUnit\Framework\TestCase;
 use Test\Unit\DomainModel\Fixtures\DummyAggregateId;
 
-final class AggregateIdTest extends \PHPUnit_Framework_TestCase
+final class AggregateIdTest extends TestCase
 {
     /**
      * @test

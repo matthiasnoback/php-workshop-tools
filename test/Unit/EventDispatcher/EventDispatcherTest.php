@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace Test\Unit\Common\EventDispatcher;
 
 use Common\EventDispatcher\EventDispatcher;
+use PHPUnit\Framework\TestCase;
 
-final class EventDispatcherTest extends \PHPUnit_Framework_TestCase
+final class EventDispatcherTest extends TestCase
 {
     /**
      * @test

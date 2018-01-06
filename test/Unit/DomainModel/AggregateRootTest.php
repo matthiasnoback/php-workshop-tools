@@ -3,10 +3,11 @@ declare(strict_types = 1);
 
 namespace Test\Unit\DomainModel;
 
+use PHPUnit\Framework\TestCase;
 use Test\Unit\DomainModel\Fixtures\DummyAggregateRoot;
 use Test\Unit\DomainModel\Fixtures\DummyDomainEvent;
 
-final class AggregateRootTest extends \PHPUnit_Framework_TestCase
+final class AggregateRootTest extends TestCase
 {
     /**
      * @test

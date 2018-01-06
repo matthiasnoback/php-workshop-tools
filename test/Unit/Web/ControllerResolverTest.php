@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace Test\Unit\Web;
 
 use Common\Web\ControllerResolver;
+use PHPUnit\Framework\TestCase;
 use Test\Unit\Web\Fixtures\Application;
 
-class ControllerResolverTest extends \PHPUnit_Framework_TestCase
+class ControllerResolverTest extends TestCase
 {
     /**
      * @var Application
