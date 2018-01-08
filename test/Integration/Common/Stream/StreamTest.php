@@ -11,6 +11,11 @@ use Symfony\Component\Process\Process;
 final class StreamTest extends TestCase
 {
     /**
+     * @var string
+     */
+    private $streamFilePath;
+
+    /**
      * @var Process
      */
     private $consumer;
@@ -22,14 +27,14 @@ final class StreamTest extends TestCase
 
     protected function setUp()
     {
-        $streamFilePath = tempnam(sys_get_temp_dir(), 'stream_file_path');
+        $this->streamFilePath = tempnam(__DIR__, 'stream_file_path');
 
         $this->consumer = new Process('php consume.php', __DIR__, [
-            'STREAM_FILE_PATH' => $streamFilePath
+            'STREAM_FILE_PATH' => $this->streamFilePath
         ]);
 
         $this->producer = new Process('php produce.php', __DIR__, [
-            'STREAM_FILE_PATH' => $streamFilePath
+            'STREAM_FILE_PATH' => $this->streamFilePath
         ]);
     }
 
@@ -41,14 +46,21 @@ final class StreamTest extends TestCase
         $this->consumer->start();
         $this->producer->run();
 
+        // give it some time, then check for startup errors
+        sleep(1);
+        if ($this->consumer->isTerminated()) {
+            throw new \RuntimeException('Consumer failed: ' . $this->consumer->getErrorOutput());
+        }
+
         self::assertThat(function () {
             return strpos($this->consumer->getIncrementalOutput(), 'Hello, world!') !== false;
-        }, new Eventually(10000, 500));
+        }, new Eventually(5000, 500));
     }
 
     protected function tearDown()
     {
         $this->consumer->stop();
         $this->producer->stop();
+        @unlink($this->streamFilePath);
     }
 }

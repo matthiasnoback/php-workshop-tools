@@ -1,4 +1,4 @@
-FROM matthiasnoback/php_workshop_base
+FROM matthiasnoback/php_workshop_tools_base
 
 # Expose a running instance of PHP's built-in web server
 EXPOSE 8080
