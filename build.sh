@@ -43,5 +43,7 @@ docker run \
 # Optionally, push the new images
 if [[ "$1" == "push" ]]; then
     docker push matthiasnoback/php_workshop_tools_base:latest
+    docker push matthiasnoback/php_workshop_tools_library_test
+    docker push matthiasnoback/php_workshop_tools_image_test:latest
     docker push matthiasnoback/php_workshop_tools_simple_webserver:latest
 fi

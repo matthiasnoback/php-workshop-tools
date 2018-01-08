@@ -3,10 +3,11 @@ FROM php:7.1-cli
 COPY config/php/app.ini ${PHP_INI_DIR}/conf.d/20-app.ini
 
 # Install Composer
+RUN DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && \
+    apt-get install -y git zlib1g-dev && \
+    docker-php-ext-install -j$(nproc) zip
 COPY --from=composer:1.5 /usr/bin/composer /usr/local/bin/composer
-
-# Update coreutils (to make `tail` work)
-RUN apt-get update && apt-get install -y coreutils
 
 # Install and configure XDebug
 RUN pecl install xdebug && docker-php-ext-enable xdebug
