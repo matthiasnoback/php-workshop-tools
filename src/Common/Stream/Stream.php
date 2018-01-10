@@ -28,14 +28,15 @@ final class Stream
     private static function getStreamFilePath(): string
     {
         $streamFilePath = getenv(self::ENV_STREAM_FILE_PATH);
-        Assertion::string($streamFilePath, sprintf('Environment variable "%s" should be set', self::ENV_STREAM_FILE_PATH));
-        $streamFilePath = realpath($streamFilePath);
+        if ($streamFilePath === false) {
+            throw new \RuntimeException(sprintf('Environment variable "%s" should be set', self::ENV_STREAM_FILE_PATH));
+        }
 
         if (!is_file($streamFilePath)) {
             Filesystem::ensureFilePathIsWritable($streamFilePath);
             touch($streamFilePath);
         }
 
-        return $streamFilePath;
+        return realpath($streamFilePath);
     }
 }
