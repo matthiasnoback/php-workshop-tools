@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Test\Integration\Common\Stream;
 
+use Common\Stream\Stream;
 use Matthias\PhpUnitAsynchronicity\Eventually;
-use Matthias\Polling\CallableProbe;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
 
@@ -55,6 +55,16 @@ final class StreamTest extends TestCase
         self::assertThat(function () {
             return strpos($this->consumer->getIncrementalOutput(), 'Hello, world!') !== false;
         }, new Eventually(5000, 500));
+    }
+
+    /**
+     * @test
+     */
+    public function it_throws_an_exception_if_the_env_variable_has_not_been_defined()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('STREAM_FILE_PATH');
+        Stream::produce('');
     }
 
     protected function tearDown()
