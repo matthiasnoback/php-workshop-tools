@@ -8,7 +8,6 @@ final class Json
     /**
      * @param mixed $data
      * @return string
-     * @throws \InvalidArgumentException
      */
     public static function encode($data): string
     {

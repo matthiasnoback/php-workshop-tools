@@ -64,7 +64,7 @@ final class StreamTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('STREAM_FILE_PATH');
-        Stream::produce('');
+        Stream::produce('', []);
     }
 
     protected function tearDown()

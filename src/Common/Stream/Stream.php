@@ -15,14 +15,25 @@ final class Stream
 {
     private const ENV_STREAM_FILE_PATH = 'STREAM_FILE_PATH';
 
+    /**
+     * @param callable $callback
+     * @return void
+     * @see Consumer::consume()
+     */
     public static function consume(callable $callback): void
     {
         (new Consumer(self::getStreamFilePath()))->consume($callback);
     }
 
-    public static function produce(string $message): void
+    /**
+     * @param string $messageType
+     * @param $data
+     * @return void
+     * @see Producer::produce()
+     */
+    public static function produce(string $messageType, $data): void
     {
-        (new Producer(self::getStreamFilePath()))->produce($message);
+        (new Producer(self::getStreamFilePath()))->produce($messageType, $data);
     }
 
     private static function getStreamFilePath(): string

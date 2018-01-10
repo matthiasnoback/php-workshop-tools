@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Common\Stream;
 
-use Common\Persistence\Filesystem;
+use Common\String\Json;
 
 final class Producer
 {
@@ -17,8 +17,18 @@ final class Producer
         $this->streamFilePath = $streamFilePath;
     }
 
-    public function produce(string $message): void
+    /**
+     * @param string $messageType
+     * @param mixed $data
+     */
+    public function produce(string $messageType, $data): void
     {
-        file_put_contents($this->streamFilePath, $message . "\n", FILE_APPEND);
+        $message = new \stdClass();
+        $message->messageType = $messageType;
+        $message->data = $data;
+
+        $encodedMessage = Json::encode($message);
+
+        file_put_contents($this->streamFilePath, $encodedMessage . "\n", FILE_APPEND);
     }
 }

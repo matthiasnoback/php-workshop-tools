@@ -6,4 +6,4 @@ require __DIR__ . '/bootstrap.php';
 use Common\Stream\Stream;
 
 sleep(2);
-Stream::produce('Hello, world!');
+Stream::produce('hello_world', 'Hello, world!');

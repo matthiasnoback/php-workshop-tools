@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Common\Stream;
 
-use Assert\Assertion;
-use Common\Persistence\Filesystem;
+use Common\String\Json;
 use Symfony\Component\Process\Process;
 
 final class Consumer
@@ -38,7 +37,8 @@ final class Consumer
                         continue;
                     }
 
-                    $callback($line);
+                    $decodedMessage = Json::decode($line);
+                    $callback($decodedMessage->messageType, $decodedMessage->data);
                 }
             }
 
