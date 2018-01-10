@@ -93,4 +93,22 @@ class ControllerResolverTest extends TestCase
 
         echo $response;
     }
+
+    /**
+     * @test
+     */
+    public function it_resolves_an_empty_route_to_the_index_controller()
+    {
+        $controller = ControllerResolver::resolve(
+            ['PATH_INFO' => '/'],
+            [],
+            $this->application
+        );
+
+        $this->assertEquals(
+            // when called, $controller will return its own name
+            'Test\Unit\Web\Fixtures\Application::indexController',
+            $controller()
+        );
+    }
 }

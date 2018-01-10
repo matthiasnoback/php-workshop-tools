@@ -24,9 +24,9 @@ final class ControllerResolver
         Assertion::isObject($application, '$application should be an object containing public "[route]Controller" methods.');
 
         $route = trim($server['PATH_INFO'] ?? '', '/');
-        $controllerMethod = [$application, $route . 'Controller'];
+        $controllerMethod = [$application, ($route ?: 'index') . 'Controller'];
 
-        if (empty($route) || !is_callable($controllerMethod)) {
+        if (!is_callable($controllerMethod)) {
             return self::create404Controller($application);
         }
 
