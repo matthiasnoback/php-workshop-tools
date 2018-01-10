@@ -1,8 +1,8 @@
 FROM matthiasnoback/php_workshop_tools_base
 
 # Expose a running instance of PHP's built-in web server
-EXPOSE 80
-ENTRYPOINT ["php", "-S", "0.0.0.0:80", "-t"]
+EXPOSE 8080
+ENTRYPOINT ["php", "-S", "0.0.0.0:8080", "-t"]
 
 # The built-in PHP webserver only responds to SIGINT, not to SIGTERM
 STOPSIGNAL SIGINT
