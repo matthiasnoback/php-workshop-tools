@@ -23,8 +23,8 @@ final class ControllerResolver
     {
         Assertion::isObject($application, '$application should be an object containing public "[route]Controller" methods.');
 
-        $route = trim($server['PATH_INFO'] ?? '', '/');
-        $controllerMethod = [$application, ($route ?: 'index') . 'Controller'];
+        $action = trim(self::determinePathInfo($server), '/');
+        $controllerMethod = [$application, ($action ?: 'index') . 'Controller'];
 
         if (!is_callable($controllerMethod)) {
             return self::create404Controller($application);
@@ -59,5 +59,35 @@ final class ControllerResolver
                 }
             }
         };
+    }
+
+    /**
+     * @param array $server
+     * @return mixed
+     */
+    private static function determinePathInfo(array $server)
+    {
+        if (isset($server['PATH_INFO'])) {
+            return $server['PATH_INFO'];
+        }
+
+        // works for PHP-FPM
+        if (isset($server['REQUEST_URI'])) {
+
+            $requestUri = $server['REQUEST_URI'];
+            if (empty($requestUri)) {
+                return '/';
+            }
+
+            if ($pos = strpos($requestUri, '?')) {
+                // return the request URI without query parameters
+                return substr($requestUri, 0, $pos);
+            }
+
+            // the request URI doesn't contain any query parameters, return as is
+            return $requestUri;
+        }
+
+        throw new \RuntimeException('Could not determine path info (based on either PATH_INFO or REQUEST_URI)');
     }
 }

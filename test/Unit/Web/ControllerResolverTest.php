@@ -59,17 +59,16 @@ class ControllerResolverTest extends TestCase
 
     /**
      * @test
-     * @bugfix
      */
-    public function it_deals_with_undefined_path_info()
+    public function it_fails_when_it_can_not_determine_the_path_info()
     {
-        $controller = ControllerResolver::resolve(
+        $this->expectException(\RuntimeException::class);
+
+        ControllerResolver::resolve(
             [],
             [],
             $this->application
         );
-
-        $this->assertTrue(is_callable($controller));
     }
 
     /**
@@ -107,6 +106,60 @@ class ControllerResolverTest extends TestCase
 
         $this->assertEquals(
             // when called, $controller will return its own name
+            'Test\Unit\Web\Fixtures\Application::indexController',
+            $controller()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_uses_request_uri_if_path_info_is_not_available()
+    {
+        $controller = ControllerResolver::resolve(
+            ['REQUEST_URI' => '/some'],
+            [],
+            $this->application
+        );
+
+        $this->assertEquals(
+        // when called, $controller will return its own name
+            'Test\Unit\Web\Fixtures\Application::someController',
+            $controller()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_strips_query_parameters_from_the_request_uri()
+    {
+        $controller = ControllerResolver::resolve(
+            ['REQUEST_URI' => '/some?foo=bar'],
+            [],
+            $this->application
+        );
+
+        $this->assertEquals(
+        // when called, $controller will return its own name
+            'Test\Unit\Web\Fixtures\Application::someController',
+            $controller()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_defaults_to_index_if_request_uri_is_empty()
+    {
+        $controller = ControllerResolver::resolve(
+            ['REQUEST_URI' => ''],
+            [],
+            $this->application
+        );
+
+        $this->assertEquals(
+        // when called, $controller will return its own name
             'Test\Unit\Web\Fixtures\Application::indexController',
             $controller()
         );
