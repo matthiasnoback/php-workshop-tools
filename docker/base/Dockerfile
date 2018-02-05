@@ -7,7 +7,7 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
     apt-get install -y git zlib1g-dev && \
     docker-php-ext-install -j$(nproc) zip
-COPY --from=composer:1.5 /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # Install and configure XDebug
 RUN pecl install xdebug && docker-php-ext-enable xdebug
