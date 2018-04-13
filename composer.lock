@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "082f0568203f1da4e7daf5182d176135",
+    "content-hash": "69e2b76315387cf991e13c359aef9736",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -63,21 +63,21 @@
         },
         {
             "name": "matthiasnoback/naive-serializer",
-            "version": "v0.5.0",
+            "version": "v0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/naive-serializer.git",
-                "reference": "73a8f97d16f353002319c57d94aefc1675c591f1"
+                "reference": "baf2b2ca0e879c1a5969813081bc39050ecedbe4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/naive-serializer/zipball/73a8f97d16f353002319c57d94aefc1675c591f1",
-                "reference": "73a8f97d16f353002319c57d94aefc1675c591f1",
+                "url": "https://api.github.com/repos/matthiasnoback/naive-serializer/zipball/baf2b2ca0e879c1a5969813081bc39050ecedbe4",
+                "reference": "baf2b2ca0e879c1a5969813081bc39050ecedbe4",
                 "shasum": ""
             },
             "require": {
                 "beberlei/assert": "^2.7",
-                "php": "^7.0",
+                "php": "^7.1",
                 "phpdocumentor/reflection-docblock": "^4.3"
             },
             "require-dev": {
@@ -99,7 +99,7 @@
                     "email": "matthiasnoback@gmail.com"
                 }
             ],
-            "time": "2018-04-13T07:35:23+00:00"
+            "time": "2018-04-13T07:46:55+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -718,6 +718,54 @@
                 "instantiate"
             ],
             "time": "2017-07-22T11:58:36+00:00"
+        },
+        {
+            "name": "matthiasnoback/phpunit-asynchronicity",
+            "version": "v1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/matthiasnoback/phpunit-asynchronicity.git",
+                "reference": "bb429c21b8739e8eafc058bd8b694059f7558e43"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/matthiasnoback/phpunit-asynchronicity/zipball/bb429c21b8739e8eafc058bd8b694059f7558e43",
+                "reference": "bb429c21b8739e8eafc058bd8b694059f7558e43",
+                "shasum": ""
+            },
+            "require": {
+                "beberlei/assert": "^2.9",
+                "php": "^7.1",
+                "phpunit/phpunit": "^7.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Matthias\\PhpUnitAsynchronicity\\": "src/",
+                    "Matthias\\Polling\\": "src/",
+                    "Matthias\\PhpUnitAsynchronicity\\Tests": "tests/",
+                    "Matthias\\Polling\\Tests": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matthias Noback",
+                    "email": "matthiasnoback@gmail.com",
+                    "homepage": "http://php-and-symfony.matthiasnoback.nl"
+                }
+            ],
+            "description": "Library for asserting things that happen asynchronously with PHPUnit",
+            "homepage": "http://github.com/matthiasnoback/phpunit-asynchronicity",
+            "keywords": [
+                "assertion",
+                "asynchronicity",
+                "phpunit"
+            ],
+            "time": "2018-04-13T07:50:07+00:00"
         },
         {
             "name": "myclabs/deep-copy",
