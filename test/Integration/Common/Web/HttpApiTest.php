@@ -13,7 +13,7 @@ final class HttpApiTest extends TestCase
      */
     public function it_fetches_a_response()
     {
-        $response = HttpApi::fetchResponse('https://www.google.com');
+        $response = HttpApi::fetchJsonResponse('https://www.google.com');
 
         self::assertNotEmpty($response);
     }

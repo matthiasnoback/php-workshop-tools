@@ -15,7 +15,7 @@ final class HttpApi
      */
     public static function fetchDecodedJsonResponse(string $url)
     {
-        return Json::decode(self::fetchResponse($url));
+        return Json::decode(self::fetchJsonResponse($url));
     }
 
     /**
@@ -24,9 +24,14 @@ final class HttpApi
      * @param string $url
      * @return string
      */
-    public static function fetchResponse(string $url): string
+    public static function fetchJsonResponse(string $url): string
     {
-        $context = stream_context_create(['http' => ['timeout' => 5]]);
+        $context = stream_context_create([
+            'http' => [
+                'timeout' => 5,
+                'header' => "Accept: application/json\r\n"
+            ]
+        ]);
         $response = file_get_contents($url, false, $context);
 
         if ($response === false) {
