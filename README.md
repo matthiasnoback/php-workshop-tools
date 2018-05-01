@@ -23,7 +23,7 @@ You only need to provide the `DOCKER_HOST_IP` environment variable if you want t
 ### When using Docker for Mac
 
 ```
-export DOCKER_HOST_IP=docker.for.mac.localhost
+export DOCKER_HOST_IP=host.docker.internal
 ```
 
 ### When using Docker for Windows
