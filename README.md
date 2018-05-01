@@ -20,16 +20,10 @@ To make these always available, you could add the above lines to your `~/.bash_p
 
 You only need to provide the `DOCKER_HOST_IP` environment variable if you want to use XDebug for step debugging.
 
-### When using Docker for Mac
+### When using Docker for Mac and Docker for Windows
 
 ```
 export DOCKER_HOST_IP=host.docker.internal
-```
-
-### When using Docker for Windows
-
-```
-export DOCKER_HOST_IP=docker.for.windowss.localhost
 ```
 
 ### When using Linux
