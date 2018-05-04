@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Common\Stream;
 
+use Assert\Assertion;
 use Common\String\Json;
 use Symfony\Component\Process\Process;
 
@@ -18,10 +19,13 @@ final class Consumer
         $this->streamFilePath = $streamFilePath;
     }
 
-    public function consume(callable $callback): void
+    public function consume(callable $callback, int $startAtIndex): void
     {
+        Assertion::greaterOrEqualThan($startAtIndex, 0, 'The consumer can only start consuming at index 0 or greater');
+
         // read all of the stream at once, then keep following new additions
-        $process = new Process(sprintf('tail -f -n +1 %s', $this->streamFilePath));
+        $location = 1 + $startAtIndex;
+        $process = new Process(sprintf('tail -f -n +%d %s', $location, $this->streamFilePath));
 
         // never stop
         $process->setTimeout(null);

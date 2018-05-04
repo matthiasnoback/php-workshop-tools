@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Common\Stream;
 
+use Assert\Assertion;
 use Common\String\Json;
 
 final class Producer

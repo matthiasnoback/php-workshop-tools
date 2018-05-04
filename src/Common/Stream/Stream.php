@@ -17,12 +17,13 @@ final class Stream
 
     /**
      * @param callable $callback
+     * @param int $startAtIndex
      * @return void
      * @see Consumer::consume()
      */
-    public static function consume(callable $callback): void
+    public static function consume(callable $callback, int $startAtIndex = 0): void
     {
-        (new Consumer(self::getStreamFilePath()))->consume($callback);
+        (new Consumer(self::getStreamFilePath()))->consume($callback, $startAtIndex);
     }
 
     /**
