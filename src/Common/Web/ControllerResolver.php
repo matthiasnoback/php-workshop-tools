@@ -30,7 +30,11 @@ final class ControllerResolver
             return self::create404Controller($application);
         }
 
-        return function () use ($controllerMethod, $get) {
+        return function () use ($application, $controllerMethod, $get) {
+            if (method_exists($application, 'bootstrap')) {
+                $application->bootstrap();
+            }
+
             return call_user_func_array($controllerMethod, $get);
         };
     }
