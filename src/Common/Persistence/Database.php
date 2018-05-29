@@ -56,6 +56,26 @@ class Database
 
     /**
      * @param string $className
+     * @param callable $filter
+     * @return object|null
+     */
+    public static function findOne(string $className, callable $filter)
+    {
+        return self::repositoryFor($className)->findOne($filter);
+    }
+
+    /**
+     * @param string $className
+     * @param callable $filter
+     * @return object[]|array
+     */
+    public static function find(string $className, callable $filter): array
+    {
+        return self::repositoryFor($className)->find($filter);
+    }
+
+    /**
+     * @param string $className
      * @return Repository
      */
     private static function repositoryFor(string $className) : Repository

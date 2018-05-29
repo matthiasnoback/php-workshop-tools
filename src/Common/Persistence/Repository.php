@@ -125,4 +125,28 @@ final class Repository
             throw new \RuntimeException(sprintf('Failed to save file "%s"', $this->databaseFilePath));
         }
     }
+
+    /**
+     * @param callable $filter
+     * @return object[]|array
+     */
+    public function find(callable $filter): array
+    {
+        return array_values(array_filter($this->loadAllObjects(), $filter));
+    }
+
+    /**
+     * @param callable $filter
+     * @return object|null
+     */
+    public function findOne(callable $filter)
+    {
+        foreach ($this->loadAllObjects() as $object) {
+            if ($filter($object)) {
+                return $object;
+            }
+        }
+
+        return null;
+    }
 }
