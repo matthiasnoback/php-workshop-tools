@@ -37,12 +37,19 @@ final class ControllerResolver
 
         return function () use ($application, $controllerMethod, $get) {
             try {
+                ob_start();
+
                 if (method_exists($application, 'bootstrap')) {
                     $application->bootstrap();
                 }
 
-                return call_user_func_array($controllerMethod, $get);
+                $result = call_user_func_array($controllerMethod, $get);
+                ob_end_flush();
+
+                return $result;
             } catch (\Throwable $throwable) {
+                ob_end_clean();
+
                 http_response_code(500);
                 header('Content-Type: plain/text');
 
