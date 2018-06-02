@@ -7,17 +7,17 @@ use Assert\Assertion;
 
 class Database
 {
-    const ENV_DATABASE_DIRECTORY = 'DB_PATH';
+    private const ENV_DATABASE_DIRECTORY = 'DB_PATH';
 
     /**
      * @see Repository::persist()
      *
-     * @param Entity|object $object
+     * @param IdentifiableObject $object
      * @return void
      */
-    public static function persist($object) : void
+    public static function persist(IdentifiableObject $object) : void
     {
-        self::repositoryFor(get_class($object))->persist($object);
+        self::repositoryFor(\get_class($object))->persist($object);
     }
 
     /**

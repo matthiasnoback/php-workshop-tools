@@ -3,10 +3,10 @@ declare(strict_types = 1);
 
 namespace Test\Integration\Common\Persistence;
 
-use Common\Persistence\Entity;
+use Common\Persistence\IdentifiableObject;
 use Common\Persistence\Id;
 
-final class PersistableDummy implements Entity
+final class PersistableDummy implements IdentifiableObject
 {
     /**
      * @var DummyId
@@ -21,7 +21,7 @@ final class PersistableDummy implements Entity
     public function __construct(DummyId $id)
     {
         $this->id = $id;
-        $this->secretValue = uniqid();
+        $this->secretValue = uniqid('', true);
     }
 
     public function id() : Id

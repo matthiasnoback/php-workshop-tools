@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Common\Persistence;
 
-interface Entity
+interface IdentifiableObject
 {
     /**
      * @return string Or object with __toString() method
