@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace Common\Web;
 
+use Buzz\Browser;
+use Buzz\Client\FileGetContents;
 use Common\String\Json;
+use Psr\Http\Message\ResponseInterface;
 
 final class HttpApi
 {
@@ -26,18 +29,49 @@ final class HttpApi
      */
     public static function fetchJsonResponse(string $url): string
     {
-        $context = stream_context_create([
-            'http' => [
-                'timeout' => 5,
-                'header' => "Accept: application/json\r\n"
-            ]
+        $response = self::getBrowser()->get($url, [
+            'Accept' => 'application/json',
+            'X-Internal-Request' => 'true'
         ]);
-        $response = file_get_contents($url, false, $context);
 
-        if ($response === false) {
-            throw new \RuntimeException('Failed to make a request to: ' . $url);
+        self::handleFailure($response);
+
+        return $response->getBody()->getContents();
+    }
+
+    /**
+     * @param string $url
+     * @param array $data An array of data which will be encoded as form data
+     * @return string The response content
+     * @throws \RuntimeException
+     */
+    public static function postFormData(string $url, array $data): string
+    {
+        $response = self::getBrowser()->submitForm($url, $data, 'POST', [
+            'Content-type' => 'application/x-www-form-urlencoded',
+            'Accept' => 'application/json',
+            'X-Internal-Request' => 'true'
+        ]);
+
+        self::handleFailure($response);
+
+        return $response->getBody()->getContents();
+    }
+
+    private static function getBrowser(): Browser
+    {
+        return new Browser(new FileGetContents(['timeout' => 5]));
+    }
+
+    private static function handleFailure(ResponseInterface $response): void
+    {
+        if ($response->getStatusCode() >= 400) {
+            throw new \RuntimeException(sprintf(
+                'Failed HTTP response. Status: %d %s. Body: %s',
+                $response->getStatusCode(),
+                $response->getReasonPhrase(),
+                $response->getBody()->getContents()
+            ));
         }
-
-        return $response;
     }
 }
