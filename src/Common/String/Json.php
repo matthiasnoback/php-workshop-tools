@@ -22,11 +22,12 @@ final class Json
 
     /**
      * @param string $string
+     * @param bool $convertObjectIntoAssociativeArray
      * @return mixed
      */
-    public static function decode(string $string)
+    public static function decode(string $string, $convertObjectIntoAssociativeArray = false)
     {
-        $result = json_decode($string);
+        $result = json_decode($string, $convertObjectIntoAssociativeArray);
 
         if ($result === null && json_last_error()) {
             throw new \InvalidArgumentException('JSON decoding error: ' . json_last_error_msg());

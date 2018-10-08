@@ -27,6 +27,14 @@ final class JsonTest extends TestCase
     /**
      * @test
      */
+    public function it_can_return_arrays_if_you_want()
+    {
+        self::assertEquals(['foo' => 'bar'], Json::decode('{"foo":"bar"}', true));
+    }
+
+    /**
+     * @test
+     */
     public function it_throws_an_exception_upon_an_encoding_error()
     {
         $canNotEncodeThis = fopen(__FILE__, 'r+b');
