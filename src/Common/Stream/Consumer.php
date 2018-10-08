@@ -41,7 +41,7 @@ final class Consumer
                         continue;
                     }
 
-                    $decodedMessage = Json::decode($line);
+                    $decodedMessage = Json::decode($line, true);
                     $callback($decodedMessage->messageType, $decodedMessage->data);
                 }
             }
