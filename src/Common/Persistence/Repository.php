@@ -33,10 +33,10 @@ final class Repository
     /**
      * Provide an object that can be persisted (its `id()` method should return a string identifier. It will be serialized to disk.
      *
-     * @param Entity|object $object
+     * @param IdentifiableObject $object
      * @return void
      */
-    public function persist($object): void
+    public function persist(IdentifiableObject $object): void
     {
         $id = (string)$object->id();
 
@@ -124,5 +124,29 @@ final class Repository
         if ($fileSaved === false) {
             throw new \RuntimeException(sprintf('Failed to save file "%s"', $this->databaseFilePath));
         }
+    }
+
+    /**
+     * @param callable $filter
+     * @return object[]|array
+     */
+    public function find(callable $filter): array
+    {
+        return array_values(array_filter($this->loadAllObjects(), $filter));
+    }
+
+    /**
+     * @param callable $filter
+     * @return object|null
+     */
+    public function findOne(callable $filter)
+    {
+        foreach ($this->loadAllObjects() as $object) {
+            if ($filter($object)) {
+                return $object;
+            }
+        }
+
+        return null;
     }
 }

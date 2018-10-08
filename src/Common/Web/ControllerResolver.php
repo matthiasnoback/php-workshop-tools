@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Common\Web;
 
 use Assert\Assertion;
+use Symfony\Component\Debug\Debug;
 
 /**
  * Simple but convenient controller resolver.
@@ -21,6 +22,10 @@ final class ControllerResolver
      */
     public static function resolve(array $server, array $get, $application): callable
     {
+        if (!isset($server['HTTP_X_INTERNAL_REQUEST'])) {
+            Debug::enable();
+        }
+
         Assertion::isObject($application, '$application should be an object containing public "[route]Controller" methods.');
 
         $action = trim(self::determinePathInfo($server), '/');
@@ -30,8 +35,26 @@ final class ControllerResolver
             return self::create404Controller($application);
         }
 
-        return function () use ($controllerMethod, $get) {
-            return call_user_func_array($controllerMethod, $get);
+        return function () use ($application, $controllerMethod, $get) {
+            try {
+                ob_start();
+
+                if (method_exists($application, 'bootstrap')) {
+                    $application->bootstrap();
+                }
+
+                $result = call_user_func_array($controllerMethod, $get);
+                ob_end_flush();
+
+                return $result;
+            } catch (\Throwable $throwable) {
+                ob_end_clean();
+
+                http_response_code(500);
+                header('Content-Type: plain/text');
+
+                throw $throwable;
+            }
         };
     }
 

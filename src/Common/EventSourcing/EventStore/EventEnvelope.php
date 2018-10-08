@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Common\EventSourcing\EventStore;
 
-use Common\Persistence\Entity;
+use Common\Persistence\IdentifiableObject;
 
-final class EventEnvelope implements Entity
+final class EventEnvelope implements IdentifiableObject
 {
     private const DATE_TIME_FORMAT = \DateTime::ATOM;
 
