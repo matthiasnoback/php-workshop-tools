@@ -35,4 +35,14 @@ final class Json
 
         return $result;
     }
+    
+    public static function decodeAsArray(string $source): array
+    {
+        return self::decode($source, true);
+    }
+
+    public static function decodeAsObject(string $source): \stdClass
+    {
+        return self::decode($source);
+    }
 }
