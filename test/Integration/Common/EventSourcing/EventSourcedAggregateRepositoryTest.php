@@ -29,7 +29,7 @@ final class EventSourcedAggregateRepositoryTest extends TestCase
      */
     private $eventStore;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $storageFacility = new DatabaseStorageFacility();
         $storageFacility->deleteAll();

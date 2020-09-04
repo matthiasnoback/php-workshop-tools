@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 final class FlashMessageTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $_SESSION = [];
     }

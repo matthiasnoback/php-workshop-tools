@@ -1,1 +1,0 @@
-- Make the server respond to signals (SIGINT)

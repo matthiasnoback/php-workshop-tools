@@ -1,10 +1,13 @@
-sudo: required
+sudo: false
 
-services:
-  - docker
+language: php
+
+matrix:
+  include:
+    - php: 7.3
 
 install:
-  - docker pull matthiasnoback/php_workshop_tools_library_test
+  - composer install
 
 script:
-  - docker run --rm -v $(pwd):/opt matthiasnoback/php_workshop_tools_library_test
+  - vendor/bin/phpunit
