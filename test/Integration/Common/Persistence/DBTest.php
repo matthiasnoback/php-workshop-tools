@@ -9,7 +9,7 @@ use Common\Persistence\Database;
 
 class DBTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         Database::deleteAll(PersistableDummy::class);
     }

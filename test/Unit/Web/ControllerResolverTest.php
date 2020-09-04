@@ -14,7 +14,7 @@ class ControllerResolverTest extends TestCase
      */
     private $application;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->application = new Application();
     }
@@ -87,8 +87,8 @@ class ControllerResolverTest extends TestCase
         $response = ob_get_contents();
         ob_end_clean();
 
-        $this->assertContains('/some', $response);
-        $this->assertContains('/withArguments', $response);
+        $this->assertStringContainsString('/some', $response);
+        $this->assertStringContainsString('/withArguments', $response);
 
         echo $response;
     }

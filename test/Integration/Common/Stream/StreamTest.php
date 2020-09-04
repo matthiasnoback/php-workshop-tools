@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Test\Integration\Common\Stream;
 
+use Asynchronicity\PHPUnit\Eventually;
 use Common\Stream\Stream;
-use Matthias\PhpUnitAsynchronicity\Eventually;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
 
@@ -30,7 +30,7 @@ final class StreamTest extends TestCase
      */
     private $fooBarProducer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->streamFilePath = tempnam(__DIR__, 'stream_file_path');
 
@@ -107,7 +107,7 @@ final class StreamTest extends TestCase
         Stream::produce('', []);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->consumer instanceof Process) {
             $this->consumer->stop();

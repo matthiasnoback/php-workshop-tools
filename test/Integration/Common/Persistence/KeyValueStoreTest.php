@@ -72,7 +72,7 @@ final class KeyValueStoreTest extends TestCase
         self::assertSame(null, KeyValueStore::get('key'));
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         KeyValueStore::del('key');
         KeyValueStore::del('undefined');
