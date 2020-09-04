@@ -6,6 +6,7 @@ namespace Test\Integration\Common\Stream;
 use Asynchronicity\PHPUnit\Eventually;
 use Common\Stream\Stream;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Symfony\Component\Process\Process;
 
 final class StreamTest extends TestCase
@@ -57,11 +58,13 @@ final class StreamTest extends TestCase
         // give it some time, then check for startup errors
         sleep(1);
         if ($this->consumer->isTerminated()) {
-            throw new \RuntimeException('Consumer failed: ' . $this->consumer->getErrorOutput());
+            throw new RuntimeException('Consumer failed: ' . $this->consumer->getErrorOutput());
         }
 
         self::assertThat(function () {
-            return strpos($this->consumer->getIncrementalOutput(), 'Hello, world!') !== false;
+            if (strpos($this->consumer->getIncrementalOutput(), 'Hello, world!') === false) {
+                throw new RuntimeException('Did not find the expected string in the output');
+            }
         }, new Eventually(5000, 500));
     }
 
@@ -85,12 +88,14 @@ final class StreamTest extends TestCase
         // give it some time, then check for startup errors
         sleep(1);
         if ($this->consumer->isTerminated()) {
-            throw new \RuntimeException('Consumer failed: ' . $this->consumer->getErrorOutput());
+            throw new RuntimeException('Consumer failed: ' . $this->consumer->getErrorOutput());
         }
 
         self::assertThat(
             function () {
-                return $this->consumer->getOutput() === "hello_world\nhello_world\n";
+                if ($this->consumer->getOutput() !== "hello_world\nhello_world\n") {
+                    throw new RuntimeException('The output did not match the expected string');
+                }
             },
             new Eventually(5000, 500),
             sprintf('Actual output was: "%s"', $this->consumer->getOutput())
@@ -102,7 +107,7 @@ final class StreamTest extends TestCase
      */
     public function it_throws_an_exception_if_the_env_variable_has_not_been_defined(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('STREAM_FILE_PATH');
         Stream::produce('', []);
     }

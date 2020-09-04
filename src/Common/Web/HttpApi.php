@@ -6,6 +6,7 @@ namespace Common\Web;
 use Buzz\Browser;
 use Buzz\Client\FileGetContents;
 use Common\String\Json;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseInterface;
 
 final class HttpApi
@@ -60,7 +61,7 @@ final class HttpApi
 
     private static function getBrowser(): Browser
     {
-        return new Browser(new FileGetContents(['timeout' => 5]));
+        return new Browser(new FileGetContents(new Psr17Factory(), ['timeout' => 5]), new Psr17Factory());
     }
 
     private static function handleFailure(ResponseInterface $response): void
