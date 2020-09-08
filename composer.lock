@@ -188,21 +188,21 @@
         },
         {
             "name": "matthiasnoback/naive-serializer",
-            "version": "v0.10.0",
+            "version": "v0.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/naive-serializer.git",
-                "reference": "53ee8b811f8a0aa6ddf150642f5e527cede1f2d1"
+                "reference": "477275dbb7cb6ea43fc1532515077c86344f6101"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/naive-serializer/zipball/53ee8b811f8a0aa6ddf150642f5e527cede1f2d1",
-                "reference": "53ee8b811f8a0aa6ddf150642f5e527cede1f2d1",
+                "url": "https://api.github.com/repos/matthiasnoback/naive-serializer/zipball/477275dbb7cb6ea43fc1532515077c86344f6101",
+                "reference": "477275dbb7cb6ea43fc1532515077c86344f6101",
                 "shasum": ""
             },
             "require": {
                 "beberlei/assert": "^3.2",
-                "ext-json": "^7.4",
+                "ext-json": "*",
                 "php": "^7.4",
                 "phpdocumentor/reflection-docblock": "^5.2"
             },
@@ -229,7 +229,7 @@
                 }
             ],
             "description": "A naive JSON serializer which recursively converts an object graph to and from JSON, without any configuration or custom code.",
-            "time": "2020-09-08T06:30:39+00:00"
+            "time": "2020-09-08T07:11:53+00:00"
         },
         {
             "name": "nyholm/psr7",
