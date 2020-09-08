@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "10a9466aaae50e7d36f28efd53df9615",
+    "content-hash": "0159a7d725a1ae30636753c985b3bc3b",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -188,24 +188,28 @@
         },
         {
             "name": "matthiasnoback/naive-serializer",
-            "version": "v0.9.1",
+            "version": "v0.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/naive-serializer.git",
-                "reference": "440f0c84c3524dff2c2fe4ac773e133a28f26f78"
+                "reference": "53ee8b811f8a0aa6ddf150642f5e527cede1f2d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/naive-serializer/zipball/440f0c84c3524dff2c2fe4ac773e133a28f26f78",
-                "reference": "440f0c84c3524dff2c2fe4ac773e133a28f26f78",
+                "url": "https://api.github.com/repos/matthiasnoback/naive-serializer/zipball/53ee8b811f8a0aa6ddf150642f5e527cede1f2d1",
+                "reference": "53ee8b811f8a0aa6ddf150642f5e527cede1f2d1",
                 "shasum": ""
             },
             "require": {
                 "beberlei/assert": "^3.2",
-                "php": "^7.3",
+                "ext-json": "^7.4",
+                "php": "^7.4",
                 "phpdocumentor/reflection-docblock": "^5.2"
             },
             "require-dev": {
+                "phpstan/phpstan": "^0.12.42",
+                "phpstan/phpstan-beberlei-assert": "^0.12.3",
+                "phpstan/phpstan-phpunit": "^0.12.16",
                 "phpunit/phpunit": "^9.3"
             },
             "type": "library",
@@ -224,7 +228,8 @@
                     "email": "matthiasnoback@gmail.com"
                 }
             ],
-            "time": "2020-09-04T14:43:32+00:00"
+            "description": "A naive JSON serializer which recursively converts an object graph to and from JSON, without any configuration or custom code.",
+            "time": "2020-09-08T06:30:39+00:00"
         },
         {
             "name": "nyholm/psr7",
