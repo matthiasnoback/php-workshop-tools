@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Common\Web;
 
 use Assert\Assertion;
-use Symfony\Component\Debug\Debug;
+use Symfony\Component\ErrorHandler\Debug;
 
 /**
  * Simple but convenient controller resolver.
